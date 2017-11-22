@@ -4,7 +4,7 @@ var fs = require('fs')
 var config = require('./config.js')
 
 var pageRouter = require('./routes/pageRouter.js')
-var backupRouter = require('./routes/backupRoute.js')
+var fileRouter = require('./routes/fileUpload.js')
 
 var app = express()
 
@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/views')) // Serve the views folder.
 app.use(express.static(__dirname + '/scripts')) // Serve the client side javascript.
 
 app.use(pageRouter )// Register the page router to express.
-app.use(backupRouter) // Register the backup router to express.
+app.use(fileRouter) // Register the backup router to express.
 
 // Catch 404 and forward to error handler.
 app.use(function (req, res, next) {
