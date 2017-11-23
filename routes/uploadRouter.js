@@ -17,9 +17,9 @@ var uploadDir = path.join(__dirname, '../uploads')
 router.post('/API/upload/',  function (req, res) {
     //Set storage options
     var storageOptions = storageEngine.setStorageOptionsFN(uploadDir)
-
+    var options = {storage:storageOptions}
     //Call file upload method
-    storageEngine.multiUploadFN(req, res, storageOptions,'image', 3, function (error, result) {
+    storageEngine.multiUploadFN(req, res, options,'image', 3, function (error, result) {
         if (error)
             res.status(400).send('Multi Upload Failed : ' + error)
         else
