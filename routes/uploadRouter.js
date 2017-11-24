@@ -2,7 +2,7 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:20 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-11-23 15:45:47
+ * @Last Modified time: 2017-11-24 11:32:46
  */
 
 var express = require('express')
@@ -15,9 +15,12 @@ var uploadDir = path.join(__dirname, '../uploads')
 
 // Upload files endpoint
 router.post('/API/upload/',  function (req, res) {
-    //Set storage options
+    
+    //Set upload options
     var storageOptions = storageEngine.setStorageOptionsFN(uploadDir)
-    var options = {storage:storageOptions}
+    var filterOptions = storageEngine.setFilterOptionsFN([".jpg",".png"])
+    var options = {storage:storageOptions, fileFilter:filterOptions}
+
     //Call file upload method
     storageEngine.multiUploadFN(req, res, options,'image', 3, function (error, result) {
         if (error)
