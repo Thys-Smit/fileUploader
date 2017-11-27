@@ -3,7 +3,7 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:11 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-11-24 11:47:41
+ * @Last Modified time: 2017-11-27 16:20:57
  */
 
 var express = require('express')
@@ -58,22 +58,25 @@ function setFilterOptions (acceptedFiles) {
             return cb(null,true)
 
         var ext = path.extname(file.originalname)
+        var extMatch = false
 
         filesCheck.forEach(function validFile(fileExt,index){
-            if (ext === fileExt)
+            if (ext === fileExt){
+                extMatch = true
                 return cb(null,true)
+            }  
+            
+            if(index === filesCheck.length - 1 && !extMatch)
+                return cb(new Error("The file type \'" + ext + "\' is not permitted for upload"),false)
+            
         },ext)
         
-        
-
-        return cb(new Error("The file type \'" + ext + "\' is not permitted for upload"),false)
     }
     
       // You can always pass an error if something goes wrong:
     //cb(new Error('I don\'t have a clue!'))
     
 }
-
 
 //Include functions to export in the below object array 
 var exportFunctions = {multiUploadFN: multiUpload, singleUploadFN: singleUpload, setStorageOptionsFN: setStorageOptions, setFilterOptionsFN: setFilterOptions}

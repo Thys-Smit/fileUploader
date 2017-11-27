@@ -2,7 +2,7 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:20 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-11-24 11:32:46
+ * @Last Modified time: 2017-11-27 10:06:57
  */
 
 var express = require('express')
@@ -18,7 +18,7 @@ router.post('/API/upload/',  function (req, res) {
     
     //Set upload options
     var storageOptions = storageEngine.setStorageOptionsFN(uploadDir)
-    var filterOptions = storageEngine.setFilterOptionsFN([".jpg",".png"])
+    var filterOptions = storageEngine.setFilterOptionsFN([".png",".jpg"])
     var options = {storage:storageOptions, fileFilter:filterOptions}
 
     //Call file upload method
