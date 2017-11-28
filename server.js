@@ -2,7 +2,7 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:04 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-11-23 12:11:30
+ * @Last Modified time: 2017-11-28 12:44:23
  */
 
 var express = require('express')
@@ -12,6 +12,7 @@ var config = require('./config.js')
 
 var pageRouter = require('./routes/pageRouter.js')
 var uploadRouter = require('./routes/uploadRouter.js')
+var sqlRouter = require('./routes/sqlRouter.js')
 
 var app = express()
 
@@ -23,7 +24,8 @@ app.use(express.static(__dirname + '/views')) // Serve the views folder.
 app.use(express.static(__dirname + '/scripts')) // Serve the client side javascript.
 
 app.use(pageRouter )// Register the page router to express.
-app.use(uploadRouter) // Register the backup router to express.
+app.use(uploadRouter) // Register the upload router to express.
+app.use(sqlRouter) // Register the sql router to express.
 
 // Catch 404 and forward to error handler.
 app.use(function (req, res, next) {
