@@ -9,33 +9,9 @@ var config = {
     database: 'Media Server'
 }
 
- // async () => {
-    //     try {
-    //         const pool = await sql.connect(config)
-    //         const result = await sql.query`select * from FileWarehouse`
-    //         console.log(result)
-    //     } catch (err) {
-    //         console.log(err)
-    //         // ... error checks
-    //     }
-    // }
    
 router.get('/API/GetResults', function(req,res){
     
-    // const pool = new sql.ConnectionPool({
-    //     user: 'sa',
-    //     password: 'C@r@bTekniva',
-    //     server: 'LW7ZAPTA02THYSS\\DEV',
-    //     database: 'Media Server'
-    // })
-
-    // pool.connect(err => {
-    //     if(err)
-    //         console.log(err)
-    //     else
-    //         console.log("Connection Established")
-    // })
-
     sql.connect(config, err => {
         new sql.Request().query('SELECT * FROM FileWarehouse', (err, result) => {
             if (err){
@@ -52,7 +28,20 @@ router.get('/API/GetResults', function(req,res){
             console.log("Connection Established")
         }
     })
-    //sql.close()
+    
+})
+
+router.get('/API/GetResultsSP', function(req,res){
+    
+    sql.connect(config, err => {
+        new sql.Request()
+        // .input('input_parameter', sql.Int, value)
+        // .output('output_parameter', sql.VarChar(50))
+        .execute('GetFiles', (err, result) => {
+            console.log(result)
+        })
+    })
+    
 })
 
 module.exports = router
