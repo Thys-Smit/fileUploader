@@ -39,6 +39,8 @@ router.get('/API/GetResultsSP', function(req,res){
         // .output('output_parameter', sql.VarChar(50))
         .execute('GetFiles', (err, result) => {
             console.log(result)
+            sql.close()
+            res.status(200).send(result)
         })
     })
     

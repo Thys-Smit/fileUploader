@@ -3,13 +3,22 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:11 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-11-28 10:44:53
+ * @Last Modified time: 2017-12-04 16:57:39
  */
 
 var express = require('express')
 var multer = require('multer')
 var path = require('path')
 var filesTest = []
+
+const sql = require('mssql')
+
+var config = {
+    user: 'sa',
+    password: 'C@r@bTekniva',
+    server: 'localhost\\DEV',
+    database: 'Media Server'
+}
 
 //Important TODO: If 2 files are sent and one of them already exists and there is a error, the one that was getting replaced is removed.
 //Files wiith diferent field names should not be passed to the multiUpload function.
@@ -34,6 +43,28 @@ function multiFieldUpload(req, res, options, fields, callback) {
             return callback(err, null)
         else
             return callback(err, 'The selection of files has been uploaded') 
+    })    
+}
+
+
+//Function to upload multiple files from multiple fields to SQL Database
+function multiFieldUploadSQL(req, res, options, fields, callback) {
+    var upload = multer(options).fields(fields)
+    upload(req, res, function (err) {
+        if (err) 
+            return callback(err, null)
+        else
+            sql.connect(config, err => {
+                new sql.Request()
+                .input('@Path', req.files['image'].path)
+                .input('@FileName', req.files['image'].originalname)
+                // .output('output_parameter', sql.VarChar(50))
+                .execute('InsertFile', (err, result) => {
+                    console.log(result)
+                    return callback(err, 'The selection of files has been uploaded') 
+                })
+            })
+            
     })    
 }
 
@@ -92,6 +123,6 @@ function setFilterOptions (acceptedFiles) {
 
 
 //Include functions to export in the below object array 
-var exportFunctions = {multiUploadFN: multiUpload, singleUploadFN: singleUpload, setStorageOptionsFN: setStorageOptions, setFilterOptionsFN: setFilterOptions, multiFieldUploadFN: multiFieldUpload}
+var exportFunctions = {multiUploadFN: multiUpload, singleUploadFN: singleUpload, setStorageOptionsFN: setStorageOptions, setFilterOptionsFN: setFilterOptions, multiFieldUploadFN: multiFieldUpload, multiFieldUploadSQLFN: multiFieldUploadSQL}
 
 module.exports = exportFunctions
