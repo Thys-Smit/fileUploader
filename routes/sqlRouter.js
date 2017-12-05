@@ -4,7 +4,7 @@ const sql = require('mssql')
 
 var config = {
     user: 'sa',
-    password: 'C@r@bTekniva',
+    password: 'ckmcpta7',
     server: 'localhost\\DEV',
     database: 'Media Server'
 }

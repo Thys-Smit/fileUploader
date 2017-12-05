@@ -2,7 +2,7 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:20 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-12-04 16:48:46
+ * @Last Modified time: 2017-12-05 10:34:24
  */
 
 var express = require('express')
@@ -73,7 +73,7 @@ router.post('/API/multiFieldUploadToSQL', function(req,res){
     //Set upload options
     var storageOptions = storageEngine.setStorageOptionsFN(uploadDir)
     var filterOptions = storageEngine.setFilterOptionsFN([".png",".jpg"])
-    var options = {storage:storageOptions, fileFilter:filterOptions}
+    var options = {storage:storageOptions, fileFilter:filterOptions }
     var fields = [{name: 'image', maxCount: 2}, {name: 'test', maxCount: 1}]
 
     //Call file upload method
@@ -81,8 +81,7 @@ router.post('/API/multiFieldUploadToSQL', function(req,res){
         if (error)
             res.status(400).send('Multi Upload Failed : ' + error)
         else
-            res.status(200).send(result)
-            
+            res.status(200).send(result)  
     })
  
 })
