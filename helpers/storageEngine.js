@@ -3,14 +3,14 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:11 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-12-05 16:59:50
+ * @Last Modified time: 2017-12-06 11:09:02
  */
 
 var express = require('express')
 var multer = require('multer')
 var path = require('path')
 var filesTest = []
-
+var errorArray = []
 var sql = require('mssql')
 
 //Important TODO: If 2 files are sent and one of them already exists and there is a error, the one that was getting replaced is removed.
@@ -18,7 +18,7 @@ var sql = require('mssql')
 
 //Function to upload multiple files
 function multiUpload(req, res, options, fieldName, maxCount, callback) {
-    var upload = multer(options).array(fieldName, maxCount)
+    var upload = multer(options).array()
     upload(req, res, function (err) {
         if (err) 
             return callback(err, null)
@@ -44,28 +44,34 @@ function multiFieldUpload(req, res, options, fields, callback) {
 function multiFieldUploadSQL(req, res, options, fields, callbackResponse) {
     var upload = multer(options).fields(fields)
     upload(req, res, function (err) {
+        var fileFields = fields
         if (err){
-            return callback(err, null)
-            
+            return callbackResponse(err, null)
         } 
         else{
-            req.files['image'].forEach(function callback(file,index){
-                var pathString = file.path.replace(/\\/g,"\\\\");
-                var SQLRequest = new sql.Request()
-                SQLRequest.input('Path', pathString)
-                SQLRequest.input('FileName', file.originalname)
-                // .output('output_parameter', sql.VarChar(50))
-                SQLRequest.execute('InsertFile', (err, result) => {
-                    if (err)
-                        return callbackResponse(err)
-                    else
-                       return callbackResponse(null, 'Happy')
+            fileFields.forEach(function cb(field,index){
+                req.files[field.name].forEach(function callback(file,index){
+                    //var pathString = file.path.replace(/\\/g,"\\\\");
+                    var SQLRequest = new sql.Request()
+                    SQLRequest.input('Path', file.path)
+                    SQLRequest.input('FileName', file.originalname)
+                    SQLRequest.execute('InsertFile', (err, result) => {
+                        if (err)
+                            errorArray.push(err)
+
+                        if (index === req.files[field.name].length - 1){
+                            if(errorArray.length > 0)
+                                return callbackResponse(err)
+                            else
+                                return callbackResponse(null,'Files has been uploaded to database')
+                        }
+                    })
                 })
-            })
-            
-        } // This is the on complete event. 
-        // return callbackResponse(err, 'The selection of files have been uploaded')
-    })    
+                
+                    
+            })     
+        }  
+    }, fields)
 } 
 
 

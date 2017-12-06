@@ -2,20 +2,22 @@
  * @Author: Thys Smit 
  * @Date: 2017-11-23 11:48:20 
  * @Last Modified by: Thys Smit
- * @Last Modified time: 2017-12-05 10:34:24
+ * @Last Modified time: 2017-12-06 13:07:15
  */
 
 var express = require('express')
 var router = express.Router()
+var multer = require('multer')
+var getFields = multer()
 var storageEngine = require('../helpers/storageEngine.js')
 var fs = require('fs')
 
 var path = require('path')
-var uploadDir = path.join(__dirname, '../uploads')
+//var uploadDir = path.join(__dirname, '../uploads')
+var uploadDir = 'C:\\Test\\Uploads'
 
 // Upload multiple files from same field
-router.post('/API/multiUploadToDisk/',  function (req, res) {
-    
+router.post('/API/multiUploadToDisk/', function (req, res) {
     //Set upload options
     var storageOptions = storageEngine.setStorageOptionsFN(uploadDir)
     var filterOptions = storageEngine.setFilterOptionsFN([".png",".jpg"])
@@ -74,7 +76,7 @@ router.post('/API/multiFieldUploadToSQL', function(req,res){
     var storageOptions = storageEngine.setStorageOptionsFN(uploadDir)
     var filterOptions = storageEngine.setFilterOptionsFN([".png",".jpg"])
     var options = {storage:storageOptions, fileFilter:filterOptions }
-    var fields = [{name: 'image', maxCount: 2}, {name: 'test', maxCount: 1}]
+    var fields = [{name: 'image', maxCount: 2}]
 
     //Call file upload method
     storageEngine.multiFieldUploadSQLFN(req, res, options, fields, function (error, result) {
