@@ -1,14 +1,6 @@
 var express = require('express')
 var router = express.Router()
 const sql = require('mssql')
-
-var config = {
-    user: 'sa',
-    password: 'ckmcpta7',
-    server: 'localhost\\DEV',
-    database: 'Media Server'
-}
-
    
 router.get('/API/GetResults', function(req,res){
     
