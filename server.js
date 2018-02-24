@@ -12,10 +12,10 @@ var config = require('./config.js')
 var sql = require('mssql')
 
 var config = {
-    user: 'sa',
-    password: 'ckmcpta7',
-    server: 'localhost\\DEV',
-    database: 'Media Server'
+    user: '',
+    password: '',
+    server: '',
+    database: ''
 }
 
 var pageRouter = require('./routes/pageRouter.js')
